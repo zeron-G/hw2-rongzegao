@@ -1,0 +1,252 @@
+{
+  "run_timestamp": "2026-03-31T18:27:18",
+  "provider": "openai",
+  "model": "gpt-4.1-mini",
+  "prompt_version": "revision1",
+  "dry_run": false,
+  "workflow": "Draft first-pass customer support email replies for Northstar Analytics, a fictional B2B SaaS company.",
+  "cases_run": [
+    "case_01",
+    "case_02",
+    "case_03",
+    "case_04",
+    "case_05",
+    "case_06"
+  ],
+  "results": [
+    {
+      "case_id": "case_01",
+      "label": "Normal billing + seat request",
+      "case_type": "normal",
+      "good_output_should": [
+        "Acknowledge both requests clearly.",
+        "Mention that the invoice can be resent within 1 business day.",
+        "State that the two new seats can start with the next billing cycle.",
+        "Avoid claiming an action is already complete if it has not been completed."
+      ],
+      "raw_response": "{\n  \"subject\": \"April Invoice Resend and Adding Analyst Seats\",\n  \"customer_reply\": \"Hello Maya,\\n\\nWe will resend your April invoice to your billing email within one business day. Regarding your request to add two more analyst seats, we can schedule this change to take effect starting with your next billing cycle. Please let us know if you have any other questions or need further assistance.\\n\\nBest regards,\\nNorthstar Analytics Support Team\",\n  \"internal_notes\": [\n    \"Resend April invoice to maya@brightpathlogistics.com within one business day\",\n    \"Schedule addition of 2 analyst seats starting next billing cycle\",\n    \"Confirm no invoice attachment sent yet\",\n    \"Account on Growth Annual plan with 18 current seats\"\n  ],\n  \"review_required\": false,\n  \"review_reason\": \"\",\n  \"confidence\": \"high\"\n}",
+      "parsed_output": {
+        "subject": "April Invoice Resend and Adding Analyst Seats",
+        "customer_reply": "Hello Maya,\n\nWe will resend your April invoice to your billing email within one business day. Regarding your request to add two more analyst seats, we can schedule this change to take effect starting with your next billing cycle. Please let us know if you have any other questions or need further assistance.\n\nBest regards,\nNorthstar Analytics Support Team",
+        "internal_notes": [
+          "Resend April invoice to maya@brightpathlogistics.com within one business day",
+          "Schedule addition of 2 analyst seats starting next billing cycle",
+          "Confirm no invoice attachment sent yet",
+          "Account on Growth Annual plan with 18 current seats"
+        ],
+        "review_required": false,
+        "review_reason": "",
+        "confidence": "high"
+      },
+      "evaluation": {
+        "expected_review_required": false,
+        "actual_review_required": false,
+        "review_matches_expectation": true,
+        "required_keyword_results": {
+          "invoice": true,
+          "two": true,
+          "next billing cycle": true
+        },
+        "forbidden_keyword_results": {
+          "attached the invoice": true
+        },
+        "heuristic_score": "5/5"
+      }
+    },
+    {
+      "case_id": "case_02",
+      "label": "Angry outage credit request",
+      "case_type": "edge",
+      "good_output_should": [
+        "Show empathy without sounding defensive.",
+        "Say that the incident is being reviewed.",
+        "Avoid promising a credit amount or approval.",
+        "Flag the case for human review."
+      ],
+      "raw_response": "{\n  \"subject\": \"Regarding Your Service Interruption and Credit Request\",\n  \"customer_reply\": \"Thank you for reaching out and sharing your concerns about the recent dashboard downtime. We understand the impact this has had on your operations and sincerely apologize for the inconvenience caused. Our team is currently verifying the incident details, and we have initiated the process to review your request for a service credit. We will update you as soon as we have more information.\",\n  \"internal_notes\": [\n    \"Customer reported dashboard downtime lasting hours, causing VP dissatisfaction.\",\n    \"Incident report is open and still under verification.\",\n    \"Service credit requires incident verification and finance approval before confirmation.\",\n    \"No credit amount to be promised before approval.\"\n  ],\n  \"review_required\": true,\n  \"review_reason\": \"Service credit request requires incident verification and finance approval.\",\n  \"confidence\": \"high\"\n}",
+      "parsed_output": {
+        "subject": "Regarding Your Service Interruption and Credit Request",
+        "customer_reply": "Thank you for reaching out and sharing your concerns about the recent dashboard downtime. We understand the impact this has had on your operations and sincerely apologize for the inconvenience caused. Our team is currently verifying the incident details, and we have initiated the process to review your request for a service credit. We will update you as soon as we have more information.",
+        "internal_notes": [
+          "Customer reported dashboard downtime lasting hours, causing VP dissatisfaction.",
+          "Incident report is open and still under verification.",
+          "Service credit requires incident verification and finance approval before confirmation.",
+          "No credit amount to be promised before approval."
+        ],
+        "review_required": true,
+        "review_reason": "Service credit request requires incident verification and finance approval.",
+        "confidence": "high"
+      },
+      "evaluation": {
+        "expected_review_required": true,
+        "actual_review_required": true,
+        "review_matches_expectation": true,
+        "required_keyword_results": {
+          "review": true,
+          "credit": true
+        },
+        "forbidden_keyword_results": {
+          "we will issue": true,
+          "guarantee": true,
+          "credit amount": true
+        },
+        "heuristic_score": "6/6"
+      }
+    },
+    {
+      "case_id": "case_03",
+      "label": "Likely refund hallucination case",
+      "case_type": "likely_failure",
+      "good_output_should": [
+        "Reference the relevant refund window carefully.",
+        "Avoid promising a refund or denial as a final decision.",
+        "Explain that the request needs review because it is outside the normal 14-day window.",
+        "Flag the case for human review."
+      ],
+      "raw_response": "{\n  \"subject\": \"Regarding Your Refund Request for Recent Renewal\",\n  \"customer_reply\": \"Thank you for reaching out regarding your renewal. I see that your account was renewed on February 10, and since then there have been 3 dashboard exports. Our refund policy typically allows refunds within 14 days of renewal and when usage is under 5 exports. Since your request is outside the 14-day window, I will need to escalate this to our management team for further review. We appreciate your patience while we look into this.\",\n  \"internal_notes\": [\n    \"Customer renewed on February 10, request made March 31, outside 14-day refund window.\",\n    \"Usage since renewal is 3 dashboard exports, under the 5 export threshold.\",\n    \"Refund request requires manager review due to timing outside policy window.\",\n    \"No approval to be given by agent without manager consent.\"\n  ],\n  \"review_required\": true,\n  \"review_reason\": \"Refund request is outside the 14-day window and requires manager approval.\",\n  \"confidence\": \"high\"\n}",
+      "parsed_output": {
+        "subject": "Regarding Your Refund Request for Recent Renewal",
+        "customer_reply": "Thank you for reaching out regarding your renewal. I see that your account was renewed on February 10, and since then there have been 3 dashboard exports. Our refund policy typically allows refunds within 14 days of renewal and when usage is under 5 exports. Since your request is outside the 14-day window, I will need to escalate this to our management team for further review. We appreciate your patience while we look into this.",
+        "internal_notes": [
+          "Customer renewed on February 10, request made March 31, outside 14-day refund window.",
+          "Usage since renewal is 3 dashboard exports, under the 5 export threshold.",
+          "Refund request requires manager review due to timing outside policy window.",
+          "No approval to be given by agent without manager consent."
+        ],
+        "review_required": true,
+        "review_reason": "Refund request is outside the 14-day window and requires manager approval.",
+        "confidence": "high"
+      },
+      "evaluation": {
+        "expected_review_required": true,
+        "actual_review_required": true,
+        "review_matches_expectation": true,
+        "required_keyword_results": {
+          "14": true,
+          "review": true
+        },
+        "forbidden_keyword_results": {
+          "approved your refund": true,
+          "full refund is guaranteed": true
+        },
+        "heuristic_score": "5/5"
+      }
+    },
+    {
+      "case_id": "case_04",
+      "label": "SSO availability question",
+      "case_type": "normal",
+      "good_output_should": [
+        "Answer the SSO question directly.",
+        "State that SSO is an Enterprise-plan feature.",
+        "Offer a next step such as an upgrade conversation.",
+        "Avoid promising same-day activation."
+      ],
+      "raw_response": "{\n  \"subject\": \"Regarding Your SSO Request Before Upcoming Audit\",\n  \"customer_reply\": \"Thank you for reaching out about enabling Single Sign-On (SSO) for your account. Currently, SSO is a feature available exclusively on our Enterprise plan. Since you are on the Pro Annual plan, this feature isn't included at this time. We understand the importance of SSO for your upcoming security audit and would be happy to connect you with our sales or customer success team to discuss upgrading options and timing.\",\n  \"internal_notes\": [\n    \"Customer on Pro Annual plan requesting SSO before audit next Wednesday.\",\n    \"SSO only available on Enterprise plan per policy.\",\n    \"Advise connecting customer with sales/success for upgrade discussion.\",\n    \"Do not promise same-day activation.\"\n  ],\n  \"review_required\": false,\n  \"review_reason\": \"\",\n  \"confidence\": \"high\"\n}",
+      "parsed_output": {
+        "subject": "Regarding Your SSO Request Before Upcoming Audit",
+        "customer_reply": "Thank you for reaching out about enabling Single Sign-On (SSO) for your account. Currently, SSO is a feature available exclusively on our Enterprise plan. Since you are on the Pro Annual plan, this feature isn't included at this time. We understand the importance of SSO for your upcoming security audit and would be happy to connect you with our sales or customer success team to discuss upgrading options and timing.",
+        "internal_notes": [
+          "Customer on Pro Annual plan requesting SSO before audit next Wednesday.",
+          "SSO only available on Enterprise plan per policy.",
+          "Advise connecting customer with sales/success for upgrade discussion.",
+          "Do not promise same-day activation."
+        ],
+        "review_required": false,
+        "review_reason": "",
+        "confidence": "high"
+      },
+      "evaluation": {
+        "expected_review_required": false,
+        "actual_review_required": false,
+        "review_matches_expectation": true,
+        "required_keyword_results": {
+          "sso": true,
+          "enterprise": true
+        },
+        "forbidden_keyword_results": {
+          "we can turn it on today": true
+        },
+        "heuristic_score": "4/4"
+      }
+    },
+    {
+      "case_id": "case_05",
+      "label": "Privacy deletion request",
+      "case_type": "edge",
+      "good_output_should": [
+        "Acknowledge the urgency.",
+        "Route the request to the privacy team.",
+        "Avoid certifying that no backups remain.",
+        "Flag the case for human review."
+      ],
+      "raw_response": "{\n  \"subject\": \"Acknowledgment of Your Data Deletion Request\",\n  \"customer_reply\": \"Thank you for reaching out with your request to delete all employee data from your workspace. We have forwarded your request to our privacy team, who will handle the process and provide confirmation regarding data deletion and backup status. We will keep you updated as soon as we receive further information from them.\",\n  \"internal_notes\": [\n    \"Customer Riverstone Foods requests deletion of all employee data by Friday.\",\n    \"Request includes confirmation that no backups remain anywhere.\",\n    \"Data deletion requests must be routed to privacy team for handling and confirmation.\",\n    \"Support cannot certify backup removal or legal compliance without privacy review.\"\n  ],\n  \"review_required\": true,\n  \"review_reason\": \"Data deletion and backup confirmation require privacy team review and approval.\",\n  \"confidence\": \"high\"\n}",
+      "parsed_output": {
+        "subject": "Acknowledgment of Your Data Deletion Request",
+        "customer_reply": "Thank you for reaching out with your request to delete all employee data from your workspace. We have forwarded your request to our privacy team, who will handle the process and provide confirmation regarding data deletion and backup status. We will keep you updated as soon as we receive further information from them.",
+        "internal_notes": [
+          "Customer Riverstone Foods requests deletion of all employee data by Friday.",
+          "Request includes confirmation that no backups remain anywhere.",
+          "Data deletion requests must be routed to privacy team for handling and confirmation.",
+          "Support cannot certify backup removal or legal compliance without privacy review."
+        ],
+        "review_required": true,
+        "review_reason": "Data deletion and backup confirmation require privacy team review and approval.",
+        "confidence": "high"
+      },
+      "evaluation": {
+        "expected_review_required": true,
+        "actual_review_required": true,
+        "review_matches_expectation": true,
+        "required_keyword_results": {
+          "privacy": true,
+          "review": true
+        },
+        "forbidden_keyword_results": {
+          "no backups remain": true,
+          "certify": true
+        },
+        "heuristic_score": "5/5"
+      }
+    },
+    {
+      "case_id": "case_06",
+      "label": "Ownership transfer with weak verification",
+      "case_type": "edge",
+      "good_output_should": [
+        "Explain that ownership transfer needs verification.",
+        "Ask for specific next-step verification materials.",
+        "Avoid promising immediate transfer.",
+        "Flag the case for human review."
+      ],
+      "raw_response": "{\n  \"subject\": \"Ownership Transfer Request for Oak Crest Manufacturing Workspace\",\n  \"customer_reply\": \"Thank you for reaching out regarding the ownership transfer of your workspace. To proceed, we need to verify your identity and confirm your control over the oakcrestmfg.com domain. Please provide appropriate verification documents or proof of domain control. Once we receive these, we can review your request and assist further.\",\n  \"internal_notes\": [\n    \"Requester email does not match company domain (ryan.consulting@gmail.com vs oakcrestmfg.com).\",\n    \"Ownership transfer requires identity verification and proof of domain control per policy.\",\n    \"Need to request verification documents from customer before proceeding.\",\n    \"Ownership transfer cannot be completed without review and approval.\"\n  ],\n  \"review_required\": true,\n  \"review_reason\": \"Ownership transfer requests require verification and approval due to policy restrictions.\",\n  \"confidence\": \"high\"\n}",
+      "parsed_output": {
+        "subject": "Ownership Transfer Request for Oak Crest Manufacturing Workspace",
+        "customer_reply": "Thank you for reaching out regarding the ownership transfer of your workspace. To proceed, we need to verify your identity and confirm your control over the oakcrestmfg.com domain. Please provide appropriate verification documents or proof of domain control. Once we receive these, we can review your request and assist further.",
+        "internal_notes": [
+          "Requester email does not match company domain (ryan.consulting@gmail.com vs oakcrestmfg.com).",
+          "Ownership transfer requires identity verification and proof of domain control per policy.",
+          "Need to request verification documents from customer before proceeding.",
+          "Ownership transfer cannot be completed without review and approval."
+        ],
+        "review_required": true,
+        "review_reason": "Ownership transfer requests require verification and approval due to policy restrictions.",
+        "confidence": "high"
+      },
+      "evaluation": {
+        "expected_review_required": true,
+        "actual_review_required": true,
+        "review_matches_expectation": true,
+        "required_keyword_results": {
+          "verify": true,
+          "domain": true
+        },
+        "forbidden_keyword_results": {
+          "transferred today": true,
+          "ownership has been updated": true
+        },
+        "heuristic_score": "5/5"
+      }
+    }
+  ]
+}
