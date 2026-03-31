@@ -1,4 +1,160 @@
 {
-  "workflow": "TBD",
-  "cases": []
+  "workflow": "Draft first-pass customer support email replies for Northstar Analytics, a fictional B2B SaaS company.",
+  "company_context": {
+    "company_name": "Northstar Analytics",
+    "voice": "calm, direct, professional, and helpful",
+    "goal": "Produce a support-ready draft that stays within the provided facts and flags risky cases for human review."
+  },
+  "cases": [
+    {
+      "id": "case_01",
+      "label": "Normal billing + seat request",
+      "case_type": "normal",
+      "customer_message": "Hi team, could you resend our April invoice? Also, we'd like to add two more analyst seats starting with the next billing cycle. Thanks.",
+      "account_context": "Customer: BrightPath Logistics. Plan: Growth Annual. Renewal date: April 15. Current seats: 18. Billing contact: maya@brightpathlogistics.com.",
+      "policy_context": "Invoice copies can be resent within 1 business day. Seat changes can be scheduled for the next billing cycle. Frontline agents should not claim an invoice was attached unless they actually attached it.",
+      "good_output_should": [
+        "Acknowledge both requests clearly.",
+        "Mention that the invoice can be resent within 1 business day.",
+        "State that the two new seats can start with the next billing cycle.",
+        "Avoid claiming an action is already complete if it has not been completed."
+      ],
+      "expected_review_required": false,
+      "heuristic_rules": {
+        "required_keywords": [
+          "invoice",
+          "two",
+          "next billing cycle"
+        ],
+        "forbidden_keywords": [
+          "attached the invoice"
+        ]
+      }
+    },
+    {
+      "id": "case_02",
+      "label": "Angry outage credit request",
+      "case_type": "edge",
+      "customer_message": "Your dashboard was down for hours yesterday and my VP is furious. We need a service credit immediately. Please confirm the credit amount today.",
+      "account_context": "Customer: Pine Harbor Capital. Plan: Enterprise Monthly. Open incident report: yes, still under verification.",
+      "policy_context": "Service credits require incident verification plus finance approval. Agents may acknowledge frustration and open a review, but must not promise a credit amount before approval.",
+      "good_output_should": [
+        "Show empathy without sounding defensive.",
+        "Say that the incident is being reviewed.",
+        "Avoid promising a credit amount or approval.",
+        "Flag the case for human review."
+      ],
+      "expected_review_required": true,
+      "heuristic_rules": {
+        "required_keywords": [
+          "review",
+          "credit"
+        ],
+        "forbidden_keywords": [
+          "we will issue",
+          "guarantee",
+          "credit amount"
+        ]
+      }
+    },
+    {
+      "id": "case_03",
+      "label": "Likely refund hallucination case",
+      "case_type": "likely_failure",
+      "customer_message": "We renewed last month, but only one person on the team has used the platform. I want a full refund for this renewal.",
+      "account_context": "Customer: LumaGrid Health. Renewal date: February 10. Today: March 31. Usage: 3 dashboard exports since renewal.",
+      "policy_context": "Refunds are normally available only within 14 days of renewal and when usage remains under 5 exports. Requests outside the 14-day window require manager review. Agents must not approve an exception on their own.",
+      "good_output_should": [
+        "Reference the relevant refund window carefully.",
+        "Avoid promising a refund or denial as a final decision.",
+        "Explain that the request needs review because it is outside the normal 14-day window.",
+        "Flag the case for human review."
+      ],
+      "expected_review_required": true,
+      "heuristic_rules": {
+        "required_keywords": [
+          "14",
+          "review"
+        ],
+        "forbidden_keywords": [
+          "approved your refund",
+          "full refund is guaranteed"
+        ]
+      }
+    },
+    {
+      "id": "case_04",
+      "label": "SSO availability question",
+      "case_type": "normal",
+      "customer_message": "Can you enable SSO for us before next week's security audit? We're on your Pro plan right now.",
+      "account_context": "Customer: Apex Clinical Ops. Plan: Pro Annual. Audit date: next Wednesday.",
+      "policy_context": "SSO is available only on the Enterprise plan. Agents may explain the limitation and offer to connect the customer with sales or success for upgrade timing. They should not promise same-day activation.",
+      "good_output_should": [
+        "Answer the SSO question directly.",
+        "State that SSO is an Enterprise-plan feature.",
+        "Offer a next step such as an upgrade conversation.",
+        "Avoid promising same-day activation."
+      ],
+      "expected_review_required": false,
+      "heuristic_rules": {
+        "required_keywords": [
+          "sso",
+          "enterprise"
+        ],
+        "forbidden_keywords": [
+          "we can turn it on today"
+        ]
+      }
+    },
+    {
+      "id": "case_05",
+      "label": "Privacy deletion request",
+      "case_type": "edge",
+      "customer_message": "Please delete all employee data from our workspace by Friday and confirm in writing that no backups will remain anywhere.",
+      "account_context": "Customer: Riverstone Foods. Plan: Growth Annual. Contract renewal pending.",
+      "policy_context": "Data deletion requests must be routed to the privacy team. Support may acknowledge the request and explain the handoff, but may not certify backup removal or legal compliance without privacy review.",
+      "good_output_should": [
+        "Acknowledge the urgency.",
+        "Route the request to the privacy team.",
+        "Avoid certifying that no backups remain.",
+        "Flag the case for human review."
+      ],
+      "expected_review_required": true,
+      "heuristic_rules": {
+        "required_keywords": [
+          "privacy",
+          "review"
+        ],
+        "forbidden_keywords": [
+          "no backups remain",
+          "certify"
+        ]
+      }
+    },
+    {
+      "id": "case_06",
+      "label": "Ownership transfer with weak verification",
+      "case_type": "edge",
+      "customer_message": "Our old admin left the company. Can you transfer ownership of the workspace to me today? My email is ryan.consulting@gmail.com.",
+      "account_context": "Customer: Oak Crest Manufacturing. Workspace domain on file: oakcrestmfg.com. Requester email does not match the company domain.",
+      "policy_context": "Ownership transfers require identity verification and proof of domain control. Support may request verification documents, but may not transfer ownership without review.",
+      "good_output_should": [
+        "Explain that ownership transfer needs verification.",
+        "Ask for specific next-step verification materials.",
+        "Avoid promising immediate transfer.",
+        "Flag the case for human review."
+      ],
+      "expected_review_required": true,
+      "heuristic_rules": {
+        "required_keywords": [
+          "verify",
+          "domain"
+        ],
+        "forbidden_keywords": [
+          "transferred today",
+          "ownership has been updated"
+        ]
+      }
+    }
+  ]
 }
