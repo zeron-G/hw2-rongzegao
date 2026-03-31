@@ -73,6 +73,7 @@ PROMPT_VERSIONS = {
         - Sound calm, direct, and helpful.
         - Answer the customer's main question in the first paragraph.
         - Mention the next step or expected handoff clearly.
+        - When review_required is true, explicitly say the request is under review or needs review in the customer_reply.
         - Keep the reply concise enough for real support use.
 
         Return valid JSON only with these keys:
@@ -380,15 +381,27 @@ def normalize_bool(value: Any) -> bool:
     return False
 
 
-def build_search_text(parsed_output: dict[str, Any]) -> str:
+def build_search_text(
+    parsed_output: dict[str, Any],
+    *,
+    include_internal_notes: bool = True,
+    include_review_reason: bool = True,
+) -> str:
     chunks: list[str] = []
-    for key in ("subject", "customer_reply", "review_reason", "confidence"):
+    keys = ["subject", "customer_reply", "confidence"]
+    if include_review_reason:
+        keys.append("review_reason")
+
+    for key in keys:
         value = parsed_output.get(key)
         if isinstance(value, str):
             chunks.append(value)
-    notes = parsed_output.get("internal_notes", [])
-    if isinstance(notes, list):
-        chunks.extend(str(note) for note in notes)
+
+    if include_internal_notes:
+        notes = parsed_output.get("internal_notes", [])
+        if isinstance(notes, list):
+            chunks.extend(str(note) for note in notes)
+
     return " ".join(chunks).lower()
 
 
@@ -396,13 +409,19 @@ def evaluate_case(case: dict[str, Any], parsed_output: dict[str, Any]) -> dict[s
     rules = case.get("heuristic_rules", {})
     required_keywords = rules.get("required_keywords", [])
     forbidden_keywords = rules.get("forbidden_keywords", [])
-    search_text = build_search_text(parsed_output)
+    required_search_text = build_search_text(parsed_output)
+    forbidden_search_text = build_search_text(
+        parsed_output,
+        include_internal_notes=False,
+        include_review_reason=False,
+    )
 
     required_results = {
-        keyword: keyword.lower() in search_text for keyword in required_keywords
+        keyword: keyword.lower() in required_search_text for keyword in required_keywords
     }
     forbidden_results = {
-        keyword: keyword.lower() not in search_text for keyword in forbidden_keywords
+        keyword: keyword.lower() not in forbidden_search_text
+        for keyword in forbidden_keywords
     }
     review_matches = (
         normalize_bool(parsed_output.get("review_required"))
