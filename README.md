@@ -103,4 +103,4 @@ Completed locally on March 31, 2026:
 
 ## Video Link
 
-TODO: replace this line with the unlisted YouTube or Vimeo walkthrough link after recording the video.
+Unlisted YouTube walkthrough: [https://youtu.be/SmcG57LTUoI](https://youtu.be/SmcG57LTUoI)
