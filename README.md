@@ -103,4 +103,4 @@ Completed locally on March 31, 2026:
 
 ## Video Link
 
-Unlisted YouTube walkthrough: [https://youtu.be/SmcG57LTUoI](https://youtu.be/SmcG57LTUoI)
+Unlisted YouTube walkthrough: [https://youtu.be/SmcG57LTUoI](https://youtu.be/i9ZOtmcj9Ko)
